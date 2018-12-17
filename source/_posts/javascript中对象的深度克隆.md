@@ -6,6 +6,7 @@ categories: 前端
 description: '记录一个常见的面试题，javascript中对象的深度克隆 
 转载自： https://www.cnblogs.com/jq-melody/p/4499333.html
 '
+
 ---
 
 
@@ -208,3 +209,28 @@ PS:Object.prototype.toString.call(o)能直接返回对象的类属性，形如"[
 	var arr=["a","b","c"];
 	var oNew=deepClone(arr);
 	console.log(oNew);//Object {0: "a", 1: "b", 2: "c"}
+
+### 另外一种写法，只要递归调用"浅拷贝"就行了
+
+	　　function deepCopy(p, c) {
+	
+	　　　　var c = c || {};
+	
+	　　　　for (var i in p) {
+	
+	　　　　　　if (typeof p[i] === 'object') {
+	
+	　　　　　　　　c[i] = (p[i].constructor === Array) ? [] : {};
+	
+	　　　　　　　　deepCopy(p[i], c[i]);
+	
+	　　　　　　} else {
+	
+	　　　　　　　　　c[i] = p[i];
+	
+	　　　　　　}
+	　　　　}
+	
+	　　　　return c;
+	　　}
+

@@ -1,0 +1,585 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="博客">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://yoursite.com">
+    <!--SEO-->
+
+<meta name="description" content="将会成为前端架构师的我"/>
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>整合react + mobx + axios + react-router4 | 博客</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="博客" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+	<div class="hide">
+		<script type="text/javascript">
+			var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan class='cnzz_stat_icon_1263868967 hide' %3E%3Cscript%20src%3D%22https%3A%2F%2Fs95.cnzz.com%2Fz_stat.php%3Fweb_id%3D1272564536%22%3E%3C%2Fscript%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1263868967%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+	</div>
+
+
+
+
+
+
+    
+
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://snippet.shenliyang.com/img/banner.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title='TsangTszKin'>
+            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题" class="img-responsive center-block">
+            
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://yoursite.com">博客</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa "></i>首页</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/前端/"><i class="fa "></i>前端</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/后端/"><i class="fa "></i>后端</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/工具/"><i class="fa "></i>工具</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/数据库/"><i class="fa "></i>数据库</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/管理/"><i class="fa "></i>管理</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives/"><i class="fa "></i>时间轴</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="整合react + mobx + axios + react-router4">
+            
+	            整合react + mobx + axios + react-router4
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/前端">
+            前端
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/js" title='js'>
+                        js
+                    </a>
+                
+                    <a href="/tags/架构" title='架构'>
+                        架构
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2018/12/01</span>
+        </span>
+        
+    
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <h1 id="react-mobx-axios-react-router4"><a href="#react-mobx-axios-react-router4" class="headerlink" title="react + mobx + axios + react-router4"></a>react + mobx + axios + react-router4</h1><hr>
+<p><img src="https://i.imgur.com/SrLftUC.png" alt=""></p>
+<h2 id="一，定义axios的api接口"><a href="#一，定义axios的api接口" class="headerlink" title="一，定义axios的api接口"></a>一，定义axios的api接口</h2><h3 id="aService-js"><a href="#aService-js" class="headerlink" title="aService.js"></a>aService.js</h3><pre><code>import axios from &apos;axios&apos;;
+const errorHandler = error =&gt; {
+    console.log(&quot;出错信息如下&quot;);
+    console.log(error);
+}
+const host = &apos;http://www.example.com&apos;;
+
+export default {
+    getList(){
+        return axios.get(`${host}/api/XXX`).catch(errorHandler);//get, post, put, delete方法都有
+    },
+    getDetail(id) {
+        return axios.get(`${host}/api/XXX?id=${id}`).catch(errorHandler);
+    }
+}
+//bService.js 同理
+</code></pre><p><br></p>
+<h2 id="二，定义mobx数据仓库"><a href="#二，定义mobx数据仓库" class="headerlink" title="二，定义mobx数据仓库"></a>二，定义mobx数据仓库</h2><p>原则上一个页面级组件及其的子组件都公用一个实例化的数据仓库</p>
+<h3 id="AStore-js"><a href="#AStore-js" class="headerlink" title="AStore.js"></a>AStore.js</h3><pre><code>import { observable, action, toJS, computed } from &apos;mobx&apos;;
+import aService from &apos;aService&apos;;
+
+/**
+ * A 自己的store
+ * 在 页面级 通过 Provider 渗透到所有子组件。
+ * 在子组件内用 @inject(&apos;store&apos;)，将 store 注入到自己的 props 上。
+ */
+class Store {
+    constructor() {
+        this.getListForApi = this.getListForApi.bind(this);
+    }
+
+    @observable list = []; //被观察的属性数据
+    @computed get getList(){ return toJS(this.list) } //get方法, 把observer类型转为js的类型返回
+    @action.bound setList(value) { this.list = value; } //set方法
+
+    getListForApi(){
+        aService.getList().then(this.getListForApiCallBack);
+    }
+    @action.bound getListForApiCallBack(res){
+        //这里的api回调必须这样分开写才可以被观察到
+        //这里调用api，拿到后台返回的数据后，把list赋值
+    }
+}
+
+export default new Store
+// 导出一个new的Store，确保渗透的数据仓库都用同一份数据，同一个实例
+</code></pre><h3 id="ADetailStore-js"><a href="#ADetailStore-js" class="headerlink" title="ADetailStore.js"></a>ADetailStore.js</h3><pre><code>import { observable, action, toJS, computed } from &apos;mobx&apos;;
+import aService from &apos;aService&apos;;
+
+class Store {
+    constructor() {
+        this.getDetailForApi = this.getDetailForApi.bind(this);
+    }
+
+    @observable id = &apos;&apos;;
+    @computed get getId(){ return toJS(this.id) } //get方法
+    @action.bound setId(value) { this.id = value; } //set方法
+
+    @observable info = {
+        name: &apos;&apos;,
+        code: &apos;&apos;,
+        get getName(){ return toJS(this.name) },
+        setName(value){ this.name = value; },
+        get getCode(){ return toJS(this.code) },
+        setCode(value){ this.code = value; }
+    }
+
+    getDetailForApi(){
+        aService.getDetail(this.getId).then(this.getDetailForApi);
+    }
+    @action.bound getDetailForApiCallBack(res){
+        //todo
+    }
+}
+
+export default new Store
+</code></pre><p><br></p>
+<h2 id="三，定义页面级组件"><a href="#三，定义页面级组件" class="headerlink" title="三，定义页面级组件"></a>三，定义页面级组件</h2><h3 id="A-js"><a href="#A-js" class="headerlink" title="A.js"></a>A.js</h3><pre><code>import React from &apos;react&apos;;
+import PropTypes form &apos;prop-types&apos;;
+import { observer, Provider } from &apos;mobx-react&apos;;
+import store from &apos;AStore&apos;;
+import { withRouter } from &apos;react-router-dom&apos;;
+
+@withRouter    //可获取路由信息并且有改变路由的权限
+class A extends React.Component{
+    constructor(props) {
+        super(props);
+    }
+    render(){
+        return (
+            &lt;div&gt;
+                &lt;ul&gt;
+                    {store.getList.map((item, i)=&gt;
+                        &lt;li key={i}&gt;{item.name}&lt;/li&gt;
+                    )}    //获取store的数据并且循环渲染
+                &lt;/ul&gt;
+                &lt;button
+                    onClick={()=&gt;this.props.history.push(&apos;/a/123&apos;)} //跳转到A的详情页面并且附带参数值123
+                &gt;&lt;/buton&gt;
+            &lt;/div&gt;
+        )
+    }
+}
+A.propTypes = {
+    name: PropTypes.string.isRequired
+}
+A.defaultProps = {name: &apos;&apos;}
+export default A; 
+//B同理
+//用了mobx的数据仓库可以用全局的数据来控制，用引进的store做数据仓库propTypes和defaultProps可不写
+</code></pre><h3 id="ADetail-js"><a href="#ADetail-js" class="headerlink" title="ADetail.js"></a>ADetail.js</h3><pre><code>import React from &apos;react&apos;;
+import PropTypes form &apos;prop-types&apos;;
+import { observer, Provider } from &apos;mobx-react&apos;;
+import store from &apos;ADetailStore&apos;;
+import { withRouter } from &apos;react-router-dom&apos;;
+
+@withRouter
+class ADetail extends React.Component{
+    constructor(props) {
+        super(props);
+    }
+    componentDidMount() {
+        store.getDetailForApi();
+    }
+    render(){
+        return (
+            &lt;Provider store={store}&gt;
+                &lt;div&gt;
+                    ID参数值 是｛this.props.match.params.id｝
+                    //这里可以显示和调用store的方法和数据 
+                &lt;/div&gt;
+            &lt;/Provider&gt;
+        )
+    }
+}
+export default ADetail;
+//BDetail同理
+</code></pre><h3 id="ADetailComponent-js"><a href="#ADetailComponent-js" class="headerlink" title="ADetailComponent.js"></a>ADetailComponent.js</h3><pre><code>import React from &apos;react&apos;;
+import { observer, inject } from &apos;mobx-react&apos;;
+
+@inject(&apos;store&apos;)    //inject写在observer之前
+@observer            //检测页面随着检测的数据变化而发生变化
+class ADetailComponent extends React.Component{
+    constructor(props) {
+        super(props);
+    }
+
+    render(){
+        return (
+            &lt;div &gt;
+                名称 ： {this.props.store.info.getName}
+                //这里可以显示和调用父层组件（不限）ADetail渗透进来的store的方法和数据 
+            &lt;/div&gt;
+        )
+    }
+}
+export default ADetailComponent;
+</code></pre><h3 id="Error404-js"><a href="#Error404-js" class="headerlink" title="Error404.js"></a>Error404.js</h3><pre><code>import React from &apos;react&apos;;
+
+class Error404 extends React.Component{
+
+    render(){
+        return (
+            &lt;div &gt;
+                404页面
+            &lt;/div&gt;
+        )
+    }
+}
+export default Error404;
+</code></pre><h2 id="四，定义路由配置文件"><a href="#四，定义路由配置文件" class="headerlink" title="四，定义路由配置文件"></a>四，定义路由配置文件</h2><h3 id="routersConfig-js"><a href="#routersConfig-js" class="headerlink" title="routersConfig.js"></a>routersConfig.js</h3><pre><code>//配置不用写登录页和404这种特殊页面，只写菜单导航页即可
+import A from &apos;A&apos;;
+import ADetail from &apos;ADetail&apos;;
+import B from &apos;B&apos;;
+import BDetail from &apos;BDetail&apos;;
+
+export default
+ [{
+        &apos;path&apos;: &apos;/a&apos;,
+        &apos;component&apos;: A,
+        &apos;meta&apos;: {} //这里是自定义的信息。可写可不写
+ },{
+        &apos;path&apos;: &apos;/a/:id&apos;, //这里是id是必传的参数如 /a/123
+        &apos;component&apos;: ADetail
+ },{
+        &apos;path&apos;: &apos;/b&apos;,
+        &apos;component&apos;: B
+ },{
+        &apos;path&apos;: &apos;/b/:id?&apos;, //这里是id是非必传的参数如 /a/123 或者 /a 都不会报错
+        &apos;component&apos;: BDetail,
+ },]
+</code></pre><p><br></p>
+<h2 id="五，定义路由入口文件"><a href="#五，定义路由入口文件" class="headerlink" title="五，定义路由入口文件"></a>五，定义路由入口文件</h2><h3 id="一级路由index-js"><a href="#一级路由index-js" class="headerlink" title="一级路由index.js"></a>一级路由index.js</h3><pre><code>import React, { Component } from &apos;react&apos;;
+import { Route, Switch, withRouter } from &apos;react-router-dom&apos;;
+import LoginPage from &apos;LoginPage&apos;;
+import MainPage from &apos;MainPage&apos;;
+
+@withRouter
+class Index extends Component {
+    constructor(props) {
+        super(props);
+    }
+    componentWillMount() {
+        //判断是否已登录
+    }
+    componentWillReceiveProps() {
+        //判断是否已登录
+    }
+    render (){
+        return (
+            &lt;div&gt;
+                &lt;Switch&gt;
+                    &lt;Route path=&quot;/login&quot; component={LoginPage} /&gt;
+                    &lt;Route path=&apos;/&apos; component={MainPage} /&gt;
+                &lt;/Switch&gt;
+            &lt;/div&gt;
+        )
+    }
+}
+export default Index
+</code></pre><p><br></p>
+<h3 id="二级路由MainPage-js"><a href="#二级路由MainPage-js" class="headerlink" title="二级路由MainPage.js"></a>二级路由MainPage.js</h3><pre><code>import React, { Component } from &apos;react&apos;;
+import { Route, Switch, withRouter } from &apos;react-router-dom&apos;;
+import routerConfig from &apos;routerConfig&apos;; //导入路由配置文件作遍历
+import Error404 from &apos;Error404&apos;;
+
+class MainPage extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render (){
+        return (
+            &lt;div&gt;
+                &lt;NavComponent /&gt;
+                &lt;MainContent /&gt;
+            &lt;/div&gt;
+        )
+    }
+}
+
+//导航组件
+class NavComponent extends Component {
+    render (){
+        return (
+            &lt;div&gt;
+            &lt;/div&gt;
+        )
+    }
+}
+
+//页面主组件
+@withRouter
+class MainContent extends Component {
+    render (){
+        return (
+            &lt;div&gt;
+                &lt;Switch&gt;
+                     {routerConfig.map((item, i) =&gt;
+                         &lt;Route key={i} path={item.path} exact render={props =&gt;
+                             &lt;item.component collapsed={this.props.collapsed} changeCollapsed=    {this.props.changeCollapsed} meta={item.meta} /&gt;
+                            } &gt;
+                         &lt;/Route&gt;
+                     )}
+                      &lt;Route exact component={Error404}&gt;&lt;/Route&gt;
+                &lt;/Switch&gt;
+            &lt;/div&gt;
+        )
+    }
+}
+export default MainPage
+</code></pre><h1 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h1>
+    </div>
+    
+    <div class="post-footer">
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">Snippet</a>
+            
+        </div>
+        <div>
+            
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+    
+        <a href="/2018/11/25/搭建webpack+react+antd+less+css_modules/" class="next-post btn btn-default" title='webpack + react + antd + css_modules'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">webpack + react + antd + css_modules</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    
+    <div id="vcomments" class="valine"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="/assets/valine.min.js"></script>
+
+    <script>
+        new Valine({
+            av: AV,
+            el: '#vcomments',
+            appId: 'xOKV9J4UeQAtVkvnJC7Kq2Jn-gzGzoHsz',
+            appKey: 'erIpQac4azoCmgfBB7Dl9maa',
+            placeholder: '说点什么吧',
+            notify: false,
+            verify: false,
+            avatar: 'mm',
+            meta: 'nick,mail'.split(','),
+            pageSize: '10',
+            path: window.location.pathname,
+            lang: 'zh-CN'.toLowerCase()
+        })
+    </script>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#react-mobx-axios-react-router4"><span class="toc-text">react + mobx + axios + react-router4</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一，定义axios的api接口"><span class="toc-text">一，定义axios的api接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#aService-js"><span class="toc-text">aService.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二，定义mobx数据仓库"><span class="toc-text">二，定义mobx数据仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AStore-js"><span class="toc-text">AStore.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADetailStore-js"><span class="toc-text">ADetailStore.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三，定义页面级组件"><span class="toc-text">三，定义页面级组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-js"><span class="toc-text">A.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADetail-js"><span class="toc-text">ADetail.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ADetailComponent-js"><span class="toc-text">ADetailComponent.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Error404-js"><span class="toc-text">Error404.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四，定义路由配置文件"><span class="toc-text">四，定义路由配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#routersConfig-js"><span class="toc-text">routersConfig.js</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五，定义路由入口文件"><span class="toc-text">五，定义路由入口文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一级路由index-js"><span class="toc-text">一级路由index.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级路由MainPage-js"><span class="toc-text">二级路由MainPage.js</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#完成"><span class="toc-text">完成</span></a></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2017
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

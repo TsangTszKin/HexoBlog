@@ -1,0 +1,502 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+    <!--Setting-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta name="apple-mobile-web-app-capable" content="博客">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="browsermode" content="application">
+    <meta name="screen-orientation" content="portrait">
+    <link rel="dns-prefetch" href="http://yoursite.com">
+    <!--SEO-->
+
+<meta name="description" content="将会成为前端架构师的我"/>
+
+
+
+
+
+<meta name="robots" content="all" />
+<meta name="google" content="all" />
+<meta name="googlebot" content="all" />
+<meta name="verify" content="all" />
+    <!--Title-->
+
+
+<title>javascript中对象的深度克隆 | 博客</title>
+
+
+    <link rel="alternate" href="/atom.xml" title="博客" type="application/atom+xml">
+
+
+    <link rel="icon" href="/favicon.ico">
+
+    
+
+
+
+<link rel="stylesheet" href="/css/bootstrap.min.css?rev=3.3.7">
+<link rel="stylesheet" href="/css/font-awesome.min.css?rev=4.5.0">
+<link rel="stylesheet" href="/css/style.css?rev=@@hash">
+
+
+
+
+    
+	<div class="hide">
+		<script type="text/javascript">
+			var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan class='cnzz_stat_icon_1263868967 hide' %3E%3Cscript%20src%3D%22https%3A%2F%2Fs95.cnzz.com%2Fz_stat.php%3Fweb_id%3D1272564536%22%3E%3C%2Fscript%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D1263868967%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+	</div>
+
+
+
+
+
+
+    
+
+</head>
+
+
+<!--[if lte IE 8]>
+<style>
+    html{ font-size: 1em }
+</style>
+<![endif]-->
+<!--[if lte IE 9]>
+<div style="ie">你使用的浏览器版本过低，为了你更好的阅读体验，请更新浏览器的版本或者使用其他现代浏览器，比如Chrome、Firefox、Safari等。</div>
+<![endif]-->
+
+<body>
+    <header class="main-header"  style="background-image:url(http://snippet.shenliyang.com/img/banner.jpg)"  >
+    <div class="main-header-box">
+        <a class="header-avatar" href="/" title='TsangTszKin'>
+            <img src="/img/avatar.jpg" alt="logo头像" class="img-responsive center-block">
+        </a>
+        <div class="branding">
+        	<!--<h2 class="text-hide">Snippet主题,从未如此简单有趣</h2>-->
+            
+                 <img src="/img/branding.png" alt="Snippet 博客主题" class="img-responsive center-block">
+            
+    	</div>
+    </div>
+</header>
+    <nav class="main-navigation">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="navbar-header"><span class="nav-toggle-button collapsed pull-right" data-toggle="collapse" data-target="#main-menu" id="mnav">
+                    <span class="sr-only"></span>
+                        <i class="fa fa-bars"></i>
+                    </span>
+                    <a class="navbar-brand" href="http://yoursite.com">博客</a>
+                </div>
+                <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class="menu">
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/"><i class="fa "></i>首页</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/前端/"><i class="fa "></i>前端</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/后端/"><i class="fa "></i>后端</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/工具/"><i class="fa "></i>工具</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/数据库/"><i class="fa "></i>数据库</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/categories/管理/"><i class="fa "></i>管理</a>
+                            </li>
+                        
+                            <li role="presentation" class="text-center">
+                                <a href="/archives/"><i class="fa "></i>时间轴</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+    <section class="content-wrap">
+        <div class="container">
+            <div class="row">
+                <main class="col-md-8 main-content m-post">
+                    <p id="process"></p>
+<article class="post">
+    <div class="post-head">
+        <h1 id="javascript中对象的深度克隆">
+            
+	            javascript中对象的深度克隆
+            
+        </h1>
+        <div class="post-meta">
+    
+    
+    <span class="categories-meta fa-wrap">
+        <i class="fa fa-folder-open-o"></i>
+        <a href="/categories/前端">
+            前端
+        </a>
+    </span>
+    
+
+    
+    <span class="fa-wrap">
+        <i class="fa fa-tags"></i>
+        <span class="tags-meta">
+            
+                
+                    <a href="/tags/js," title='js,'>
+                        js,
+                    </a>
+                
+            
+        </span>
+    </span>
+    
+
+    
+        
+        <span class="fa-wrap">
+            <i class="fa fa-clock-o"></i>
+            <span class="date-meta">2018/07/03</span>
+        </span>
+        
+    
+</div>
+
+            
+            
+    </div>
+    
+    <div class="post-body post-content">
+        <h1 id="一、js中的对象"><a href="#一、js中的对象" class="headerlink" title="一、js中的对象"></a>一、js中的对象</h1><p>　　谈到对象的克隆，必定要说一下对象的概念。</p>
+<p>　　js中的数据类型分为两大类：原始类型和对象类型。</p>
+<ul>
+<li>（1）原始类型包括：数值、字符串、布尔值、null、undefined（后两个是特殊的原始值，这里不做详细的说明，我的上一篇博客有谈到过一些）</li>
+<li>（2）对象类型包括：对象即是属性的集合，当然这里又两个特殊的对象—-函数（js中的一等对象）、数组（键值的有序集合）。</li>
+</ul>
+<p>　　好了既然对象分为这两类，这两种类型在复制克隆的时候是有很大区别的。原始类型存储的是对象的实际数据，而对象类型存储的是对象的引用地址（对象的实际内容单独存放，为了减少数据开销通常存放在内存中）。</p>
+<p>ps：说到这里，大家要知道，对象的原型也是引用对象，它把原型的方法和属性放在内存当中，通过原型链的方式来指向这个内存地址。</p>
+<h1 id="二、克隆的概念"><a href="#二、克隆的概念" class="headerlink" title="二、克隆的概念"></a>二、克隆的概念</h1><p>　　浅度克隆：原始类型为值传递，对象类型仍为引用传递。</p>
+<p>　　深度克隆：所有元素或属性均完全复制，与原对象完全脱离，也就是说所有对于新对象的修改都不会反映到原对象中。</p>
+<h1 id="三、浅克隆的表现"><a href="#三、浅克隆的表现" class="headerlink" title="三、浅克隆的表现"></a>三、浅克隆的表现</h1><h2 id="1，原始类型"><a href="#1，原始类型" class="headerlink" title="1，原始类型"></a>1，原始类型</h2><p>看下面一段代码</p>
+<pre><code>//数值克隆的表现
+var a=&quot;1&quot;;
+var b=a;
+b=&quot;2&quot;;
+console.log(a);// &quot;1&quot;
+console.log(b);// &quot;2&quot;
+//字符串克隆的表现
+var c=&quot;1&quot;;
+var d=c;
+d=&quot;2&quot;;
+console.log(c);// &quot;1&quot;
+console.log(d);// &quot;2&quot;
+//字符串克隆的表现
+var x=true;
+var y=x;
+y=false;
+console.log(x);// true
+console.log(y);// false
+</code></pre><p>　从上面的代码大家可以看出，原始类型即使我们采用普通的克隆方式仍能得到正确的结果，原因就是原始类型存储的是对象的实际数据。</p>
+<h2 id="2-对象类型"><a href="#2-对象类型" class="headerlink" title="2.对象类型"></a>2.对象类型</h2><p>前面说过，函数式一等对象，当然也是对象类型，但是函数的克隆通过浅克隆即可实现</p>
+<pre><code>var m=function(){alert(1);};
+var n=m;
+n=function(){alert(2);};
+
+console.log(m());//1
+console.log(n());//2
+</code></pre><p>大家能看到，我们直接通过普通赋值的方式，就实现了函数的克隆，并且不会影响之前的对象。原因就是函数的克隆会在内存单独开辟一块空间，互不影响。</p>
+<p>　　好了，说了这个特殊的”关系户“以后，我们来说说普通的”选手“。为了方便后续的代码表现，我这里定义一个复杂的对象类型oPerson。下面看一下对象类型的浅复制有什么危害：</p>
+<pre><code>var oPerson={
+    oName:&quot;rookiebob&quot;,
+    oAge:&quot;18&quot;,
+    oAddress:{
+        province:&quot;beijing&quot;
+    },    
+    ofavorite:[
+        &quot;swimming&quot;,
+        {reading:&quot;history book&quot;}
+    ],
+    skill:function(){
+        console.log(&quot;bob is coding&quot;);
+    }
+};
+function clone(obj){
+    var result={};
+    for(key in obj){
+        result[key]=obj[key];
+    }
+    return result;
+}
+var oNew=clone(oPerson);
+console.log(oPerson.oAddress.province);//beijing
+oNew.oAddress.province=&quot;shanghai&quot;;
+console.log(oPerson.oAddress.province);//shanghai
+</code></pre><p>　通过上面的代码，大家能看到，经过对象克隆以后，我修改oNew的地址，发现原对象oPerson也被修改了。这说明对象的克隆不够彻底，那也就是说深度克隆失败！</p>
+<h1 id="四、深克隆的实现"><a href="#四、深克隆的实现" class="headerlink" title="四、深克隆的实现"></a>四、深克隆的实现</h1><p>为了保证对象的所有属性都被复制到，我们必须知道如果for循环以后，得到的元素仍是Object或者Array，那么需要再次循环，直到元素是原始类型或者函数为止。为了得到元素的类型，我们定义一个通用函数，用来返回传入对象的类型。</p>
+<pre><code>//返回传递给他的任意对象的类
+function isClass(o){
+    if(o===null) return &quot;Null&quot;;
+    if(o===undefined) return &quot;Undefined&quot;;
+    return Object.prototype.toString.call(o).slice(8,-1);
+}
+</code></pre><p>PS:Object.prototype.toString.call(o)能直接返回对象的类属性，形如”[object class]”的字符串，我们通过截取class，并能知道传入的对象是什么类型。</p>
+<p>当然这里有两个疑问需要解释下：<br>　　<img src="https://i.imgur.com/h4JnZhe.png" alt=""></p>
+<ul>
+<li><p>（1）为什么不直接用toString方法？这是为了防止对象中的toString方法被重写，为了正确的调用toString()版本，必须间接的调用Function.call()方法</p>
+</li>
+<li><p>（2）为什么不使用typeof来直接判断类型？因为对于Array而言，使用typeof（Array）返回的是object，所以不能得到正确的Array，这里对于后续的数组克隆将产生致命的问题。</p>
+</li>
+</ul>
+<p>下面就是真正的深度克隆</p>
+<pre><code>//深度克隆
+function deepClone(obj){
+    var result,oClass=isClass(obj);
+        //确定result的类型
+    if(oClass===&quot;Object&quot;){
+        result={};
+    }else if(oClass===&quot;Array&quot;){
+        result=[];
+    }else{
+        return obj;
+    }
+    for(key in obj){
+        var copy=obj[key];
+        if(isClass(copy)==&quot;Object&quot;){
+            result[key]=arguments.callee(copy);//递归调用
+        }else if(isClass(copy)==&quot;Array&quot;){
+            result[key]=arguments.callee(copy);
+        }else{
+            result[key]=obj[key];
+        }
+    }
+    return result;
+}
+//返回传递给他的任意对象的类
+function isClass(o){
+    if(o===null) return &quot;Null&quot;;
+    if(o===undefined) return &quot;Undefined&quot;;
+    return Object.prototype.toString.call(o).slice(8,-1);
+}
+var oPerson={
+    oName:&quot;rookiebob&quot;,
+    oAge:&quot;18&quot;,
+    oAddress:{
+        province:&quot;beijing&quot;
+    },    
+    ofavorite:[
+        &quot;swimming&quot;,
+        {reading:&quot;history book&quot;}
+    ],
+    skill:function(){
+        console.log(&quot;bob is coding&quot;);
+    }
+};
+//深度克隆一个对象
+var oNew=deepClone(oPerson);
+
+oNew.ofavorite[1].reading=&quot;picture&quot;;
+console.log(oNew.ofavorite[1].reading);//picture
+console.log(oPerson.ofavorite[1].reading);//history book
+
+oNew.oAddress.province=&quot;shanghai&quot;;
+console.log(oPerson.oAddress.province);//beijing
+console.log(oNew.oAddress.province);//shanghai
+</code></pre><p>从上面的代码可以看到，深度克隆的对象可以完全脱离原对象，我们对新对象的任何修改都不会反映到原对象中，这样深度克隆就实现了。</p>
+<p>　　这里要注意一点的就是：为什么deepClone这个函数中的result一定要判断类型？这里有一种情况，如果你的result直接是{}对象，我明明传进去的是一个数组，结果你复制完了以后，变成了一个对象了。</p>
+<pre><code>//深度克隆
+function deepClone(obj){
+    var result={},oClass=isClass(obj);
+    // if(oClass===&quot;Object&quot;){
+    //     result={};
+    // }else if(oClass===&quot;Array&quot;){
+    //     result=[];
+    // }else{
+    //     return obj;
+    // }
+    for(key in obj){
+        var copy=obj[key];
+        if(isClass(copy)==&quot;Object&quot;){
+            result[key]=arguments.callee(copy);
+        }else if(isClass(copy)==&quot;Array&quot;){
+            result[key]=arguments.callee(copy);
+        }else{
+            result[key]=obj[key];
+        }
+    }
+    return result;
+}
+function isClass(o){
+    if(o===null) return &quot;Null&quot;;
+    if(o===undefined) return &quot;Undefined&quot;;
+    return Object.prototype.toString.call(o).slice(8,-1);
+}
+//克隆一个数组
+var arr=[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;];
+var oNew=deepClone(arr);
+console.log(oNew);//Object {0: &quot;a&quot;, 1: &quot;b&quot;, 2: &quot;c&quot;}
+</code></pre><h3 id="另外一种写法，只要递归调用”浅拷贝”就行了"><a href="#另外一种写法，只要递归调用”浅拷贝”就行了" class="headerlink" title="另外一种写法，只要递归调用”浅拷贝”就行了"></a>另外一种写法，只要递归调用”浅拷贝”就行了</h3><pre><code>　　function deepCopy(p, c) {
+
+　　　　var c = c || {};
+
+　　　　for (var i in p) {
+
+　　　　　　if (typeof p[i] === &apos;object&apos;) {
+
+　　　　　　　　c[i] = (p[i].constructor === Array) ? [] : {};
+
+　　　　　　　　deepCopy(p[i], c[i]);
+
+　　　　　　} else {
+
+　　　　　　　　　c[i] = p[i];
+
+　　　　　　}
+　　　　}
+
+　　　　return c;
+　　}
+</code></pre>
+    </div>
+    
+    <div class="post-footer">
+        <div>
+            
+                转载声明：商业转载请联系作者获得授权,非商业转载请注明出处 © <a href="" target="_blank">Snippet</a>
+            
+        </div>
+        <div>
+            
+        </div>
+    </div>
+</article>
+
+<div class="article-nav prev-next-wrap clearfix">
+    
+        <a href="/2018/11/02/git常用命令/" class="pre-post btn btn-default" title='git常用命令'>
+            <i class="fa fa-angle-left fa-fw"></i><span class="hidden-lg">上一篇</span>
+            <span class="hidden-xs">git常用命令</span>
+        </a>
+    
+    
+        <a href="/2018/07/03/javascript-utils/" class="next-post btn btn-default" title='javascript utils'>
+            <span class="hidden-lg">下一篇</span>
+            <span class="hidden-xs">javascript utils</span><i class="fa fa-angle-right fa-fw"></i>
+        </a>
+    
+</div>
+
+
+    <div id="comments">
+        
+    
+    <div id="vcomments" class="valine"></div>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="/assets/valine.min.js"></script>
+
+    <script>
+        new Valine({
+            av: AV,
+            el: '#vcomments',
+            appId: 'xOKV9J4UeQAtVkvnJC7Kq2Jn-gzGzoHsz',
+            appKey: 'erIpQac4azoCmgfBB7Dl9maa',
+            placeholder: '说点什么吧',
+            notify: false,
+            verify: false,
+            avatar: 'mm',
+            meta: 'nick,mail'.split(','),
+            pageSize: '10',
+            path: window.location.pathname,
+            lang: 'zh-CN'.toLowerCase()
+        })
+    </script>
+
+
+    </div>
+
+
+
+
+
+                </main>
+                
+                    <aside id="article-toc" role="navigation" class="col-md-4">
+    <div class="widget">
+        <h3 class="title">文章目录</h3>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、js中的对象"><span class="toc-text">一、js中的对象</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、克隆的概念"><span class="toc-text">二、克隆的概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、浅克隆的表现"><span class="toc-text">三、浅克隆的表现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1，原始类型"><span class="toc-text">1，原始类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-对象类型"><span class="toc-text">2.对象类型</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、深克隆的实现"><span class="toc-text">四、深克隆的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#另外一种写法，只要递归调用”浅拷贝”就行了"><span class="toc-text">另外一种写法，只要递归调用”浅拷贝”就行了</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+                
+            </div>
+        </div>
+    </section>
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</footer>
+
+<a id="back-to-top" class="icon-btn hide">
+	<i class="fa fa-chevron-up"></i>
+</a>
+
+
+
+
+    <div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="busuanzi">
+    
+</div>
+
+            </div>
+            <div class="col-sm-12">
+                <span>Copyright &copy; 2017
+                </span> |
+                <span>
+                    Powered by <a href="//hexo.io" class="copyright-links" target="_blank" rel="nofollow">Hexo</a>
+                </span> |
+                <span>
+                    Theme by <a href="//github.com/shenliyang/hexo-theme-snippet.git" class="copyright-links" target="_blank" rel="nofollow">Snippet</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="/js/app.js?rev=@@hash"></script>
+
+</body>
+</html>

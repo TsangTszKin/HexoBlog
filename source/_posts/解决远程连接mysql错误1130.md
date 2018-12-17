@@ -4,6 +4,7 @@ date: 2018-03-19 11:01:55
 description: '远程连接Mysql服务器的数据库，错误代码是1130，ERROR 1130: Host xxx.xxx.xxx.xxx  is not allowed to connect to this MySQL server  '
 tags: 'mysql'
 categories: 数据库
+
 ---
 
 远程连接Mysql服务器的数据库，错误代码是1130，ERROR 1130: Host xxx.xxx.xxx.xxx  is not allowed to connect to this MySQL server  

@@ -74,3 +74,63 @@ description: 'javascript的常用utils，工具，公共方法，可封装的方
 	startTimestamp = startTimestamp / 1000;
 	//2014-07-10 10:21:12的时间戳为：1404958872
 	console.log(startTimestamp + "的时间戳为：" + startTimestamp);
+
+### 回车键监听
+
+	document.onkeydown = function(event) {
+		var e = event || window.event || arguments.callee.caller.arguments[0];
+		if(e && e.keyCode == 13) { // enter 键
+						
+		}
+	};
+
+
+###  设置    checkkbox 全选全不选 选中不选中
+
+	this.checked = true;
+	this.checked = false;
+
+### 四舍五入保留N位小数
+
+	NumberObject.toFixed(num) 
+
+toFixed() 方法可把 Number 四舍五入为指定小数位数的数字。
+
+num必需。规定小数的位数，是 0 ~ 20 之间的值，包括 0 和 20，有些实现可以支持更大的数值范围。如果省略了该参数，将用 0 代替。
+
+
+### 获取浏览器的类型
+	
+	 function getBrowserType () {
+			var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+			var isOpera = userAgent.indexOf("Opera") > -1;
+			if(isOpera) {
+				return "Opera"
+			}; //判断是否Opera浏览器
+			if(userAgent.indexOf("Firefox") > -1) {
+				return "FF";
+			} //判断是否Firefox浏览器
+			if(userAgent.indexOf("Chrome") > -1) {
+				return "Chrome";
+			}
+			if(userAgent.indexOf("Safari") > -1) {
+				return "Safari";
+			} //判断是否Safari浏览器
+			if(userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+				return "IE";
+			}; //判断是否IE浏览器
+		}
+
+###  获取窗口的高度 
+
+	 	let winWidth = 0;
+	    if (window.innerWidth) winWidth = window.innerWidth;
+	    else if (document.body && document.body.clientWidth)     //IE 
+	        winWidth = document.body.clientWidth;
+	    return winWidth;
+
+### 在即将离开当前页面(刷新或关闭)时执行 JavaScript :
+
+	window.onbeforeunload = function () { 
+		return ''  //return字符串会系统提醒会否确定离开或者刷新当前页面
+	}

@@ -4,6 +4,7 @@ date: 2016-04-01 10:27:12
 description: '一些关于php的自学笔记'
 tags: 'php'
 categories: '后端'
+
 ---
 
 PHP 脚本以 <?php 开头，以 ?> 结尾：
